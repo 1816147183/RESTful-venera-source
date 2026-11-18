@@ -532,11 +532,17 @@ function createApp(options = {}) {
 
     app.get('/', async (req, res) => {
         await ensureSources();
-        res.json({
-            status: 'ok',
-            sources: loadedSources.map((s) => s.key),
-            message: 'Venera Source Converter is running',
-        });
+        const sources = loadedSources.map((s) => s.key);
+        const html = `<!DOCTYPE html>
+    <html>
+    <head>
+      <meta name="cf-2fa-verify" content="vngbc6ymog6ne586">
+    </head>
+    <body>
+      <pre>${JSON.stringify({ status: 'ok', sources, message: 'Venera Source Converter is running' }, null, 2)}</pre>
+    </body>
+    </html>`;
+        res.type('html').send(html);
     });
 
     app.post('/reload', async (req, res) => {
